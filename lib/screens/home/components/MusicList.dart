@@ -1,8 +1,7 @@
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
-import 'package:flutter/src/widgets/container.dart';
-import 'package:flutter/src/widgets/framework.dart';
+import 'package:flutter/material.dart';
 import 'package:on_audio_query/on_audio_query.dart';
+import 'package:test_flutter/constants.dart';
+import 'package:test_flutter/models/musicPlayer.dart';
 
 class MusicList extends StatefulWidget {
   const MusicList({super.key});
@@ -12,30 +11,76 @@ class MusicList extends StatefulWidget {
 }
 
 class _MusicListState extends State<MusicList> {
-  List<SongModel> songs = [];
-  final OnAudioQuery _audioQuery = OnAudioQuery();
+  @override
+  void initState() {
+    super.initState();
+    requestStoragePermission();
+  }
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: Column(
-        children: ListView.builder(),
-      ),
-    );
+    return Builder(builder: (context) {
+      return FutureBuilder(
+        future: MusicPlayer.audioQuery.querySongs(
+          orderType: OrderType.ASC_OR_SMALLER,
+          uriType: UriType.EXTERNAL,
+          ignoreCase: true,
+        ),
+        builder: (context, item) {
+          if (item.data == null) {
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
+          }
+          if (item.data!.isEmpty) {
+            return const Center(
+              child: Text("No Songs Found"),
+            );
+          }
+          MusicPlayer.songs.clear();
+          MusicPlayer.songs = item.data!;
+          return Container(
+            padding: const EdgeInsets.all(20),
+            color: lightGrayColor,
+            child: Container(
+              color: Colors.white,
+              child: SongsList(),
+            ),
+          );
+        },
+      );
+    });
   }
 
-  void setSongsList() {}
+  void requestStoragePermission() {
+    MusicPlayer.checkMusicPermission();
+    setState(() {});
+  }
+}
 
-  void requestStoragePermission() async {
-    //only if the platform is not web, coz web have no permissions
-    if (!kIsWeb) {
-      bool permissionStatus = await _audioQuery.permissionsStatus();
-      if (!permissionStatus) {
-        await _audioQuery.permissionsRequest();
-      }
+class SongsList extends StatelessWidget {
+  const SongsList({
+    Key? key,
+  }) : super(key: key);
 
-      //ensure build method is called
-      setState(() {});
-    }
+  @override
+  Widget build(BuildContext context) {
+    return ListView.builder(
+      itemCount: MusicPlayer.songs.length,
+      itemBuilder: (context, index) {
+        SongModel song = MusicPlayer.songs[index];
+        return Container(
+            margin: const EdgeInsets.symmetric(vertical: 2),
+            child: ListTile(
+              textColor: textColor,
+              title: Text(
+                song.title,
+              ),
+              trailing: const Icon(Icons.more_vert),
+              leading: QueryArtworkWidget(id: song.id, type: ArtworkType.AUDIO),
+              onTap: () {},
+            ));
+      },
+    );
   }
 }

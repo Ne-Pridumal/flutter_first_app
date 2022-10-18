@@ -1,11 +1,5 @@
-import 'package:audio_video_progress_bar/audio_video_progress_bar.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:on_audio_query/on_audio_query.dart';
-import 'package:just_audio/just_audio.dart';
-import 'package:rxdart/rxdart.dart';
 import 'package:test_flutter/screens/home/index.dart';
-import 'package:test_flutter/screens/music/index.dart';
 
 void main() {
   runApp(const MyApp());
