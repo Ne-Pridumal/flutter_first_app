@@ -1,5 +1,7 @@
+import 'package:MusicLibrary/models/musicPlayer.dart';
 import 'package:MusicLibrary/screens/home/index.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 void main() {
   runApp(const MyApp());
@@ -11,8 +13,11 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
-      home: HomeScreen(),
+    return ChangeNotifierProvider(
+      create: (context) => MusicPlayer(),
+      child: const MaterialApp(
+        home: HomeScreen(),
+      ),
     );
   }
 }
