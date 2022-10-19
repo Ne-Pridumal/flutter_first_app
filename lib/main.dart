@@ -1,5 +1,5 @@
+import 'package:MusicLibrary/screens/home/index.dart';
 import 'package:flutter/material.dart';
-import 'package:test_flutter/screens/home/index.dart';
 
 void main() {
   runApp(const MyApp());

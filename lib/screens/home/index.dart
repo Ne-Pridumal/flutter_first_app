@@ -1,6 +1,6 @@
+import 'package:MusicLibrary/constants.dart';
+import 'package:MusicLibrary/screens/home/components/MusicList.dart';
 import 'package:flutter/material.dart';
-import 'package:test_flutter/constants.dart';
-import 'package:test_flutter/screens/home/components/MusicList.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});

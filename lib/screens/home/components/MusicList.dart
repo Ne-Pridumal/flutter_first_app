@@ -1,7 +1,7 @@
+import 'package:MusicLibrary/constants.dart';
+import 'package:MusicLibrary/models/musicPlayer.dart';
 import 'package:flutter/material.dart';
 import 'package:on_audio_query/on_audio_query.dart';
-import 'package:test_flutter/constants.dart';
-import 'package:test_flutter/models/musicPlayer.dart';
 
 class MusicList extends StatefulWidget {
   const MusicList({super.key});
@@ -39,14 +39,13 @@ class _MusicListState extends State<MusicList> {
           }
           MusicPlayer.songs.clear();
           MusicPlayer.songs = item.data!;
-          return Container(
-            padding: const EdgeInsets.all(20),
-            color: lightGrayColor,
-            child: Container(
-              color: Colors.white,
-              child: SongsList(),
-            ),
-          );
+          return Scrollbar(
+              thickness: 8,
+              child: Container(
+                padding: const EdgeInsets.fromLTRB(8, 5, 8, 0),
+                color: lightGrayColor,
+                child: SongsList(),
+              ));
         },
       );
     });
@@ -65,22 +64,22 @@ class SongsList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ListView.builder(
-      itemCount: MusicPlayer.songs.length,
-      itemBuilder: (context, index) {
-        SongModel song = MusicPlayer.songs[index];
-        return Container(
-            margin: const EdgeInsets.symmetric(vertical: 2),
-            child: ListTile(
-              textColor: textColor,
-              title: Text(
-                song.title,
-              ),
-              trailing: const Icon(Icons.more_vert),
-              leading: QueryArtworkWidget(id: song.id, type: ArtworkType.AUDIO),
-              onTap: () {},
-            ));
-      },
+    return Container(
+      color: Colors.white,
+      child: ListView.builder(
+        itemBuilder: ((context, index) {
+          final song = MusicPlayer.songs[index];
+          return ListTile(
+            textColor: textColor,
+            title: Text(
+              song.title,
+            ),
+            trailing: const Icon(Icons.more_vert),
+            leading: QueryArtworkWidget(id: song.id, type: ArtworkType.AUDIO),
+            onTap: () {},
+          );
+        }),
+      ),
     );
   }
 }
