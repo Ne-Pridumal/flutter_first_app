@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/foundation.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:on_audio_query/on_audio_query.dart';
@@ -14,7 +16,7 @@ class MusicPlayer extends ChangeNotifier {
     notifyListeners();
   }
 
-  get getMusicPermission {
+  bool get getMusicPermission {
     return _musicPermission;
   }
 
@@ -23,7 +25,7 @@ class MusicPlayer extends ChangeNotifier {
     notifyListeners();
   }
 
-  get songs {
+  List<SongModel> get songs {
     return _songs;
   }
 
@@ -33,7 +35,7 @@ class MusicPlayer extends ChangeNotifier {
     notifyListeners();
   }
 
-  get currentSongs {
+  List<SongModel> get currentSongs {
     return _currentSongsList;
   }
 
@@ -42,7 +44,7 @@ class MusicPlayer extends ChangeNotifier {
     notifyListeners();
   }
 
-  get currentSongId {
+  int get currentSongId {
     return _currentSongIndex;
   }
 
@@ -50,7 +52,7 @@ class MusicPlayer extends ChangeNotifier {
     return _currentSongsList.isEmpty;
   }
 
-  get player {
+  AudioPlayer get player {
     return _player;
   }
 
@@ -59,6 +61,7 @@ class MusicPlayer extends ChangeNotifier {
       await _player.setAudioSource(
           AudioSource.uri(Uri.parse(_currentSongsList[_currentSongIndex].uri!)),
           initialIndex: _currentSongIndex);
+      await _player.setShuffleModeEnabled(false);
       await _player.play();
       notifyListeners();
     }
@@ -72,5 +75,13 @@ class MusicPlayer extends ChangeNotifier {
   playMusic() {
     _player.play();
     notifyListeners();
+  }
+
+  shuffleAll() async {
+    await _player.setAudioSource(
+        AudioSource.uri(Uri.parse(_songs[_currentSongIndex].uri!)),
+        initialIndex: _currentSongIndex);
+    await _player.setShuffleModeEnabled(true);
+    await _player.play();
   }
 }

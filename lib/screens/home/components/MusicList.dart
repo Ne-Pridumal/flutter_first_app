@@ -49,11 +49,32 @@ class _MusicListState extends State<MusicList> {
               musicPlayer.songsList = item.data!;
             }
             return Scrollbar(
-                thickness: 8,
+                thickness: 6,
+                isAlwaysShown: true,
                 child: Container(
-                  padding: const EdgeInsets.fromLTRB(8, 5, 8, 0),
+                  padding: const EdgeInsets.fromLTRB(8, 8, 8, 0),
                   color: lightGrayColor,
-                  child: SongsList(),
+                  child: Column(children: [
+                    Container(
+                      color: Colors.white,
+                      child: ListTile(
+                        textColor: orangeColor,
+                        leading: IconButton(
+                          onPressed: () {
+                            musicPlayer.shuffleAll();
+                          },
+                          icon: const Icon(Icons.shuffle, size: 30),
+                          color: orangeColor,
+                        ),
+                        title: Text('Shuffle  all'.toUpperCase(),
+                            style: TextStyle(
+                              fontSize: 25,
+                              fontFamily: 'Readex Pro',
+                            )),
+                      ),
+                    ),
+                    SongsList(),
+                  ]),
                 ));
           },
         );
@@ -83,27 +104,31 @@ class SongsList extends StatelessWidget {
     MusicPlayer musicPlayer = Provider.of<MusicPlayer>(context);
     return Consumer(
       builder: ((context, value, child) {
-        return Container(
-            color: Colors.white,
-            child: ListView.builder(
-              itemBuilder: ((context, index) {
-                final song = musicPlayer.songs[index];
-                return ListTile(
-                  textColor: textColor,
-                  title: Text(
-                    song.title,
-                  ),
-                  trailing: const Icon(Icons.more_vert),
-                  leading:
-                      QueryArtworkWidget(id: song.id, type: ArtworkType.AUDIO),
-                  onTap: () async {
-                    musicPlayer.currentSongsList = [song];
-                    musicPlayer.currentSongIndex = 0;
-                    musicPlayer.setMusic();
-                  },
-                );
-              }),
-            ));
+        return Expanded(
+            child: Container(
+                color: Colors.white,
+                child: ListView.builder(
+                  physics: const ScrollPhysics(
+                      parent: AlwaysScrollableScrollPhysics()),
+                  itemCount: musicPlayer.songs.length,
+                  itemBuilder: ((context, index) {
+                    final song = musicPlayer.songs[index];
+                    return ListTile(
+                      textColor: textColor,
+                      title: Text(
+                        song.title,
+                      ),
+                      trailing: const Icon(Icons.more_vert),
+                      leading: QueryArtworkWidget(
+                          id: song.id, type: ArtworkType.AUDIO),
+                      onTap: () async {
+                        musicPlayer.currentSongsList = [song];
+                        musicPlayer.currentSongIndex = 0;
+                        musicPlayer.setMusic();
+                      },
+                    );
+                  }),
+                )));
       }),
     );
   }

@@ -13,21 +13,17 @@ class SongMiniStatus extends StatefulWidget {
 }
 
 class _SongMiniStatusState extends State<SongMiniStatus> {
-  final AudioPlayer _player = AudioPlayer();
   @override
   Widget build(BuildContext context) {
     MusicPlayer musicPlayer = Provider.of<MusicPlayer>(context);
     if (musicPlayer.isCurrentSongsEmpty()) {
-      return Container(
-        child: Text('no song'),
-      );
+      return const SizedBox.shrink();
     }
 
     return Consumer(
       builder: (context, value, child) {
         final currentId = musicPlayer.currentSongId;
         final SongModel song = musicPlayer.currentSongs[currentId];
-        final AudioPlayer player = musicPlayer.player;
         return Container(
             color: Colors.white,
             padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 5),
@@ -36,7 +32,7 @@ class _SongMiniStatusState extends State<SongMiniStatus> {
               title: Text(song.title),
               leading: QueryArtworkWidget(id: song.id, type: ArtworkType.AUDIO),
               trailing: StreamBuilder<bool>(
-                  stream: player.playingStream,
+                  stream: musicPlayer.player.playingStream,
                   builder: ((context, snapshot) {
                     bool? playingState = snapshot.data;
                     if (playingState != null && playingState) {
