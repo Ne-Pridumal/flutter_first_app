@@ -4,7 +4,8 @@ import 'package:on_audio_query/on_audio_query.dart';
 class MusicPlayer {
   static OnAudioQuery audioQuery = OnAudioQuery();
   static List<SongModel> songs = [];
-  static SongModel? currentSong;
+  static List<SongModel> currentSongsList = [];
+  static int currentSongIndex = 0;
   static bool musicPermission = false;
 
   static void checkMusicPermission() async {
@@ -14,5 +15,10 @@ class MusicPlayer {
         await audioQuery.permissionsRequest();
       }
     }
+  }
+
+  static void setNewCurrentSongsList(List<SongModel> newList) {
+    currentSongsList.clear();
+    currentSongsList = newList;
   }
 }

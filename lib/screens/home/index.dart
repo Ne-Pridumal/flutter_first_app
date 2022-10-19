@@ -1,5 +1,6 @@
 import 'package:MusicLibrary/constants.dart';
 import 'package:MusicLibrary/screens/home/components/MusicList.dart';
+import 'package:MusicLibrary/screens/home/components/SongMiniStatus.dart';
 import 'package:flutter/material.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -14,6 +15,7 @@ class HomeScreen extends StatelessWidget {
         elevation: 0,
       ),
       body: const MusicList(),
+      bottomNavigationBar: SongMiniStatus(),
     );
   }
 }

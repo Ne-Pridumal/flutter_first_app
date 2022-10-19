@@ -76,7 +76,10 @@ class SongsList extends StatelessWidget {
             ),
             trailing: const Icon(Icons.more_vert),
             leading: QueryArtworkWidget(id: song.id, type: ArtworkType.AUDIO),
-            onTap: () {},
+            onTap: () {
+              MusicPlayer.setNewCurrentSongsList([song]);
+              MusicPlayer.currentSongIndex = 0;
+            },
           );
         }),
       ),
